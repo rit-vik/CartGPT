@@ -41,7 +41,7 @@ export default function RootLayout({
         <footer className="site-footer">
           <p>
             Built from scratch: tokenization, attention, training loop, and all.{" "}
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/rit-vik/CartGPT" target="_blank" rel="noopener noreferrer">
               View the code
             </a>
           </p>
