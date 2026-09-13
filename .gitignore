@@ -1,0 +1,22 @@
+﻿# Python
+__pycache__/
+*.pyc
+llm-env/
+
+# Raw and processed data (large, reproducible via scripts)
+data/
+**/results/
+
+# Backend runtime data
+backend/interaction_logs.db
+backend/__pycache__/
+
+# Frontend
+frontend/node_modules/
+frontend/.next/
+frontend/.env.local
+frontend/.env*.local
+
+# OS
+.DS_Store
+Thumbs.db
