@@ -37,7 +37,7 @@ export default function FindingsChart() {
             width={50}
           />
           <Tooltip
-            formatter={(value: number) => value.toFixed(4)}
+            formatter={(value) => (typeof value === "number" ? value.toFixed(4) : String(value))}
             contentStyle={{
               fontFamily: "var(--font-body)",
               border: "1px solid #1a1a1a20",

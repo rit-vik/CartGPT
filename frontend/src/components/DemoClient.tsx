@@ -23,6 +23,8 @@ export default function DemoClient() {
 
   const [sampleUsers, setSampleUsers] = useState<SampleUser[]>([]);
   const [selectedSample, setSelectedSample] = useState<SampleUser | null>(null);
+  const [loadingSampleUsers, setLoadingSampleUsers] = useState(false);
+  const [categoriesLoading, setCategoriesLoading] = useState(true);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Item[]>([]);
@@ -45,7 +47,8 @@ export default function DemoClient() {
         setCategories(cats);
         if (cats.length > 0) setCategory(cats[0].key);
       })
-      .catch(() => setError("Could not reach the backend. It may still be waking up."));
+      .catch(() => setError("Could not reach the backend. It may still be waking up."))
+      .finally(() => setCategoriesLoading(false));
   }, []);
 
   // Load sample users whenever category changes
@@ -54,9 +57,11 @@ export default function DemoClient() {
     setSelectedSample(null);
     setPredictions(null);
     setCustomSequence([]);
+    setLoadingSampleUsers(true);
     getSampleUsers(category)
       .then(setSampleUsers)
-      .catch(() => setSampleUsers([]));
+      .catch(() => setSampleUsers([]))
+      .finally(() => setLoadingSampleUsers(false));
   }, [category]);
 
   // Debounced search
@@ -148,6 +153,13 @@ export default function DemoClient() {
 
   return (
     <div className="demo">
+      {categoriesLoading && (
+        <p className="cold-start-banner">
+          Connecting to the model server. This app runs on a free tier that
+          sleeps when idle, so the first load can take up to a minute.
+        </p>
+      )}
+
       {/* Category selector */}
       <div className="demo-categories">
         {categories.map((cat) => (
@@ -183,29 +195,41 @@ export default function DemoClient() {
           {mode === "sample" ? (
             <>
               <h3>Choose a shopper</h3>
-              <div className="sample-user-grid">
-                {sampleUsers.map((su) => (
-                  <button
-                    key={su.sample_id}
-                    className={`sample-user-card ${
-                      selectedSample?.sample_id === su.sample_id ? "sample-user-card-active" : ""
-                    }`}
-                    onClick={() => {
-                      setSelectedSample(su);
-                      setPredictions(null);
-                    }}
-                  >
-                    <span className="sample-user-count">{su.history.length} items</span>
-                    <span className="sample-user-preview" title={su.history.map((h) => h.title).join(", ")}>
-                      {su.history
-                        .slice(0, 2)
-                        .map((h) => h.title)
-                        .join(", ")}
-                      {su.history.length > 2 ? "..." : ""}
-                    </span>
-                  </button>
-                ))}
-              </div>
+              {loadingSampleUsers ? (
+                <p className="empty-state">
+                  Waking up the model server, this can take up to a minute on
+                  the first request after idle.
+                </p>
+              ) : sampleUsers.length === 0 ? (
+                <p className="empty-state">
+                  Couldn&apos;t load shoppers. Try switching categories or
+                  reloading the page.
+                </p>
+              ) : (
+                <div className="sample-user-grid">
+                  {sampleUsers.map((su) => (
+                    <button
+                      key={su.sample_id}
+                      className={`sample-user-card ${
+                        selectedSample?.sample_id === su.sample_id ? "sample-user-card-active" : ""
+                      }`}
+                      onClick={() => {
+                        setSelectedSample(su);
+                        setPredictions(null);
+                      }}
+                    >
+                      <span className="sample-user-count">{su.history.length} items</span>
+                      <span className="sample-user-preview" title={su.history.map((h) => h.title).join(", ")}>
+                        {su.history
+                          .slice(0, 2)
+                          .map((h) => h.title)
+                          .join(", ")}
+                        {su.history.length > 2 ? "..." : ""}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </>
           ) : (
             <>

@@ -960,3 +960,74 @@ input:focus-visible {
   color: var(--color-yellow-deep);
   line-height: 1.5;
 }
+
+/* ---- Highlight ---- */
+
+mark {
+  background: none;
+  background-image: linear-gradient(transparent 60%, var(--color-yellow) 60%);
+  color: inherit;
+  padding: 0 0.1em;
+}
+
+/* ---- Mobile responsiveness ---- */
+
+@media (max-width: 640px) {
+  .site-header {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 1.25rem 1.25rem;
+  }
+
+  .site-nav {
+    gap: 1.25rem;
+    font-size: 0.875rem;
+  }
+
+  .home,
+  .demo-page,
+  .method-page,
+  .legal-page {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .demo-input-panel,
+  .demo-results-panel {
+    padding: 1.25rem;
+  }
+
+  .hero-ctas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-ctas .btn {
+    text-align: center;
+  }
+
+  .demo-categories {
+    gap: 0.4rem;
+  }
+
+  .category-pill {
+    font-size: 0.85rem;
+    padding: 0.45rem 0.85rem;
+  }
+
+  .method-stat-row {
+    gap: 1.25rem;
+  }
+}
+
+/* ---- Cold start banner ---- */
+
+.cold-start-banner {
+  font-size: 0.85rem;
+  padding: 0.85rem 1rem;
+  background: #fffbeb;
+  border: 1px solid var(--color-yellow-deep);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}

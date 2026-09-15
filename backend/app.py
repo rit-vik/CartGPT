@@ -82,10 +82,12 @@ def load_category(key, info):
         "vocab_size": vocab_info["vocab_size"],
         "item_metadata": item_metadata,
         "sample_users": demo_data["sample_users"],
-        "searchable_items": demo_data["searchable_items"],
-        # Precompute lowercase titles once for fast case-insensitive search
+        # Derived from item_metadata directly (already trimmed to vocab-only
+        # items) instead of storing a duplicate copy on disk.
         "searchable_items_lower": [
-            (item["title"].lower(), item) for item in demo_data["searchable_items"]
+            (info.get("title", "").lower(), {"asin": asin, "title": info.get("title"), "thumbnail": info.get("thumbnail")})
+            for asin, info in item_metadata.items()
+            if info.get("title")
         ],
         "model": model,
     }
